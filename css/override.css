@@ -1,4 +1,4 @@
-.content-section-b {
+.content-section-b, .group {
     background-color: #000;
     border:none;
 }
@@ -41,12 +41,22 @@
     color: #AEEE00;
 }
 
+.banner-wrap {
+    margin-bottom: 40px;
+}
+
 .banner-title {
     font-size: 3rem;
     color: #000;
     font-weight: bold;
     text-shadow: -1px -1px white;
-    margin-bottom: 40px;
+}
+
+.banner-date {
+    background: black;
+    font-size: 1.6rem;
+    color: #eaeaea;
+    font-weight: bold;
 }
 
 .banner-title.green {
@@ -64,4 +74,33 @@
 .blackout {
     background: rgba(0, 0, 0, .7);
     padding: 20px;
+}
+
+.navbar-default .navbar-toggle:hover:before, .navbar-default .navbar-toggle:focus:before {
+    color: #FF358B;
+}
+
+.navbar-toggle:hover:before, .navbar-toggle:focus:before {
+    color: #FF358B;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #FF358B;
+}
+
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+    color: #FF358B;
+}
+
+.race-list .menuItem {
+
+}
+
+.race-list .menuItem a {
+    font-size: 2rem;
+    color: #AEEE00;
+}
+
+.group-links {
+    padding: 20px 0;
 }
