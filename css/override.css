@@ -1,0 +1,67 @@
+.content-section-b {
+    background-color: #000;
+    border:none;
+}
+
+.race {
+    background-image: url(../img/race/race.jpg);
+    position: relative;
+    padding-bottom: 40px;
+}
+
+.race:before {
+    content: ' ';
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0;
+    z-index: -1;
+}
+
+.pink {
+    color: #FF358B;
+}
+
+.charcoal {
+    color: #333;
+}
+
+.slate {
+    color: #666;
+}
+
+.brooke, .blue {
+    color: #01B0F0;
+}
+
+.ash, .green {
+    color: #AEEE00;
+}
+
+.banner-title {
+    font-size: 3rem;
+    color: #000;
+    font-weight: bold;
+    text-shadow: -1px -1px white;
+    margin-bottom: 40px;
+}
+
+.banner-title.green {
+    background: #AEEE00;
+}
+
+.banner-title.pink {
+    background: #FF358B;
+}
+
+.banner-title.blue {
+    background: #01B0F0;
+}
+
+.blackout {
+    background: rgba(0, 0, 0, .7);
+    padding: 20px;
+}
