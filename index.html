@@ -80,26 +80,7 @@
                 <h2 class="pink">Stats</h2>
             </div>
             
-            <div class="row">
-            
-                <div class="col-sm-6 wow fadeInDown text-center">
-                  <img class="rotate" src="img/icon/tweet.svg" alt="Generic placeholder image">
-                  <h1 class="slate"><span class="counter brooke">18</span> Races</h1>
-                  <h1 class="slate"><span class="counter brooke">300</span>K</h1>
-                  <h1 class="slate"><span class="counter brooke">200</span>M</h1>
-                  <h1 class="slate"><span class="counter brooke">4.12</span> m/k</h1>
-                  <h1 class="slate"><span class="counter brooke">6.12</span> m/m</h1>
-                </div><!-- /.col-lg-4 -->
-                
-                <div class="col-sm-6 wow fadeInDown text-center">
-                  <img  class="rotate" src="img/icon/picture.svg" alt="Generic placeholder image">
-                  <h1 class="slate"><span class="counter ash">18</span> Races</h1>
-                  <h1 class="slate"><span class="counter ash">300</span>K</h1>
-                  <h1 class="slate"><span class="counter ash">200</span>M</h1>
-                  <h1 class="slate"><span class="counter ash">4.12</span> m/k</h1>
-                  <h1 class="slate"><span class="counter ash">6.12</span> m/m</h1>
-                </div><!-- /.col-lg-4 -->               
-            </div><!-- /.row -->
+            <div class="row" id="stat-holder"></div>
         </div>
     </div>
     
@@ -122,7 +103,6 @@
                     <li class="menuItem"><a href="#july2016">July</a></li>
                     <li class="menuItem"><a href="#august2016">August</a></li>
                     <li class="menuItem"><a href="#september2016">September</a></li>
-                    <li class="menuItem"><a href="#october2016">October</a></li>
                 </ul>
             </div>
            
@@ -130,6 +110,27 @@
     </nav> 
 
     <div id="race-holder"></div>
+
+    <!-- stat tpl -->
+    <script id="statTpl" type="text/template">
+        <div class="col-sm-6 wow fadeInDown text-center">
+          <img class="rotater" src="img/race/brooke.jpg">
+          <h1 class="slate"><span class="counter brooke">{{brooke.total}}</span> Races</h1>
+          <h1 class="slate"><span class="counter brooke">{{brooke.k}}</span>K</h1>
+          <h1 class="slate"><span class="counter brooke">{{brooke.m}}</span>M</h1>
+          <h1 class="slate"><span class="counter brooke">{{brooke.avgk}}</span> m/k</h1>
+          <h1 class="slate"><span class="counter brooke">{{brooke.avgm}}</span> m/m</h1>
+        </div>
+        
+        <div class="col-sm-6 wow fadeInDown text-center">
+          <img  class="rotater" src="img/race/ashlyn.jpg">
+          <h1 class="slate"><span class="counter ash">{{ashlyn.total}}</span> Races</h1>
+          <h1 class="slate"><span class="counter ash">{{ashlyn.k}}</span>K</h1>
+          <h1 class="slate"><span class="counter ash">{{ashlyn.m}}</span>M</h1>
+          <h1 class="slate"><span class="counter ash">{{ashlyn.avgk}}</span> m/k</h1>
+          <h1 class="slate"><span class="counter ash">{{ashlyn.avgm}}</span> m/m</h1>
+        </div>
+    </script>
 
     <!-- race tpl -->
     <script id="raceTpl" type="text/template">
@@ -160,7 +161,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-5 wow fadeInDown text-center blackout">
-                          <img class="rotate" src="img/icon/tweet.svg" alt="Generic placeholder image">
+                          <img class="rotater" src="img/race/brooke.jpg">
                           <h1 class="slate"><span class="brooke">{{results.brooke.place}}</span></h1>
                           <h1 class="slate"><span class="counter brooke">{{results.brooke.time}}</span>min</h1>
                           <h1 class="slate"><span class="counter brooke">{{results.brooke.kavg}}</span> m/k</h1>
@@ -170,7 +171,7 @@
                         <div class="col-sm-2"></div>
                         
                         <div class="col-sm-5 wow fadeInDown text-center blackout">
-                          <img  class="rotate" src="img/icon/picture.svg" alt="Generic placeholder image">
+                          <img class="rotater" src="img/race/ashlyn.jpg">
                           <h1 class="slate"><span class="ash">{{results.ashlyn.place}}</span></h1>
                           <h1 class="slate"><span class="counter ash">{{results.ashlyn.time}}</span>min</h1>
                           <h1 class="slate"><span class="counter ash">{{results.ashlyn.kavg}}</span> m/k</h1>
@@ -241,14 +242,71 @@
             return totalMins + '.' + totalSeconds;
         }
 
+        function getTotalTime (data, person) {
+            var totalseconds = 0,
+                i, split, distance, seconds, minutes, item,
+                finalMins, finalSeconds;
+
+            for (i=0; i<data.length; i++) {
+                item = data[i];
+                split = item.results[person].time.split('.');
+                seconds = parseInt(split[1]);
+                minutes = parseInt(split[0]);
+                totalseconds += ((minutes*60) + seconds);
+            }
+            finalMins = Math.floor(totalseconds / 60);
+            finalSeconds = totalseconds - finalMins * 60;
+
+            return finalMins + '.' + finalSeconds;
+        }
+
+        function calcTotals (data) {
+            var totalRaces = data.length, 
+                totalK = 0, 
+                totalM = 0, 
+                avgK = 0, 
+                avgM = 0,
+                i, item, totalTime;
+
+            for (i=0; i<data.length; i++) {
+                item = data[i];
+                totalK += item.distance;
+            }
+
+            // brooke first
+            totalTime = getTotalTime(data, 'brooke');
+            totalM = (totalK * 0.621371);
+
+            var brooke = {
+                total: totalRaces,
+                k: totalK,
+                m: totalM.toFixed(2),
+                avgk: calcAvg(totalTime, totalK, 'k'),
+                avgm: calcAvg(totalTime, totalK, 'm')
+            };
+            // now ashlyn
+            totalTime = getTotalTime(data, 'ashlyn');
+
+            var ashlyn = {
+                total: totalRaces,
+                k: totalK,
+                m: totalM.toFixed(2),
+                avgk: calcAvg(totalTime, totalK, 'k'),
+                avgm: calcAvg(totalTime, totalK, 'm')
+            };
+            
+            return {brooke: brooke, ashlyn: ashlyn};
+        }
+
         function createOrderedData (data) {
             var keys = [],
                 counter = -1,
                 monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                images = ['collage1.jpg', 'collage2.jpg', 'collage3.jpg', 'collage4.jpg', 'collage5.jpg', 'collage6.jpg'],
                 key, item, date;
 
             var getColor = function (index) {
-                return index % 2 ? 'green' : index % 1 ? 'blue' : 'pink';
+                return index % 3 === 0 ? 'green' : index % 3 === 2 ? 'blue' : 'pink';
             }
 
             for (key in data) {
@@ -258,18 +316,24 @@
                 item.month = monthNames[date.getMonth()];
                 item.year = date.getFullYear();
                 item.monthslug = (item.month + item.year).toLowerCase();
-                item.color = getColor(counter++);
                 item.results.brooke.kavg = calcAvg(item.results.brooke.time, item.distance, 'k');
                 item.results.brooke.mavg = calcAvg(item.results.brooke.time, item.distance, 'm');
                 item.results.ashlyn.kavg = calcAvg(item.results.ashlyn.time, item.distance, 'k');
                 item.results.ashlyn.mavg = calcAvg(item.results.ashlyn.time, item.distance, 'm');
-                console.log(item)
+
                 keys.push(item);
             }
 
-            return keys.sort(function (o1, o2) {
+            var finalData = keys.sort(function (o1, o2) {
                 return new Date(o1.date) - new Date(o2.date);
             });
+
+            for (var i=0; i<finalData.length; i++) {
+                finalData[i].image = images[i % 5];
+                finalData[i].color = getColor(i);
+            }
+
+            return finalData;
         }
 
         function groupData (data) {
@@ -288,6 +352,7 @@
                         races: []
                     };
                     groups.push(group);
+                    groupCache[item.monthslug] = true;
                 }
 
                 group.races.push(item);
@@ -301,12 +366,16 @@
         races.on('value', function (snapshot) {
             var orderedResult = createOrderedData(snapshot.val());
             var result = groupData(orderedResult);
-            var template = $('#raceTpl').html();
-            var html = Mustache.to_html(template, {
+            var totals = calcTotals(orderedResult);
+            var raceTpl = $('#raceTpl').html();
+            var statTpl = $('#statTpl').html();
+            var raceHtml = Mustache.to_html(raceTpl, {
                 groups: result
             });
+            var statHtml = Mustache.to_html(statTpl, totals);
 
-            $('#race-holder').html(html);
+            $('#race-holder').html(raceHtml);
+            $('#stat-holder').html(statHtml);
 
                 
             $('.counter').counterUp({

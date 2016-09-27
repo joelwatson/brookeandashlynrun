@@ -3,6 +3,14 @@
     border:none;
 }
 
+.intro-header {
+    background-image: url(../img/race/shoes.jpg);
+}
+
+.rotater {
+    border-radius: 50%;
+}
+
 .race {
     background-image: url(../img/race/race.jpg);
     position: relative;
@@ -93,13 +101,35 @@
     color: #FF358B;
 }
 
-.race-list .menuItem {
+.race-list {
+    text-align: center;
+}
 
+.group, .content-section-b {
+    background: repeating-linear-gradient(
+      -55deg,
+      #000,
+      #000 10px,
+      #111 10px,
+      #111 20px
+    );
+}
+
+.group-links h2 {
+    margin-bottom: 40px;
+}
+
+.race-list .menuItem {
+    display: inline-block;
+    margin-right: 50px;
+    background: #AEEE00;
+    padding: 5px;
+    margin-bottom: 20px;
 }
 
 .race-list .menuItem a {
     font-size: 2rem;
-    color: #AEEE00;
+    color: #333;
 }
 
 .group-links {
