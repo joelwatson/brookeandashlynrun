@@ -1,0 +1,40 @@
+{
+    "races": {
+        "donutdash16": {
+            "name": "Donut Dash 5k",
+            "date": "06/16/2016",
+            "distance": 5,
+            "image": "race.jpg",
+            "results": {
+                "brooke": {
+                    "time": "22:51",
+                    "place": "3rd",
+                    "ispr": true
+                },
+                "ashlyn": {
+                    "time": "28:43",
+                    "place": "6th",
+                    "ispr": true
+                }
+            }
+        },
+        "rockthecrossroads16": {
+            "name": "Rock the Crossroads 5k",
+            "date": "06/23/2016",
+            "distance": 5,
+            "image": "race.jpg",
+            "results": {
+                "brooke": {
+                    "time": "21:32",
+                    "place": "4th",
+                    "ispr": false
+                },
+                "ashlyn": {
+                    "time": "32:43",
+                    "place": "12th",
+                    "ispr": false
+                }
+            }
+        }
+    }
+}

@@ -103,68 +103,7 @@
 		</div>
 	</div>
 	
-	
-	
-	<!-- Banner Download -->
-	<div class="race">
-		<div class="row banner-title pink">
-			<div class="container">
-				Donut Dash 5k // 6.6.16
-			</div>
-		</div>
-		<div class="container">
-			<div class="row">
-			
-				<div class="col-sm-5 wow fadeInDown text-center blackout">
-				  <img class="rotate" src="img/icon/tweet.svg" alt="Generic placeholder image">
-				  <h1 class="slate"><span class="brooke">1st</span> Place</h1>
-				  <h1 class="slate"><span class="counter brooke">20.11</span>min</h1>
-				  <h1 class="slate"><span class="counter brooke">4.12</span> m/k</h1>
-				  <h1 class="slate"><span class="counter brooke">6.12</span> m/m</h1>
-				</div><!-- /.col-lg-4 -->
-				
-				<div class="col-sm-2"></div>
-				
-				<div class="col-sm-5 wow fadeInDown text-center blackout">
-				  <img  class="rotate" src="img/icon/picture.svg" alt="Generic placeholder image">
-				  <h1 class="slate"><span class="ash">1st</span> Place</h1>
-				  <h1 class="slate"><span class="counter ash">25.11</span>min</h1>
-				  <h1 class="slate"><span class="counter ash">4.12</span> m/k</h1>
-				  <h1 class="slate"><span class="counter ash">6.12</span> m/m</h1>
-				</div><!-- /.col-lg-4 -->				
-			</div><!-- /.row -->
-		</div>
-	</div>
-
-	<div class="race">
-		<div class="row banner-title green">
-			<div class="container">
-				Rock the Crossroads 5k // 6.13.16
-			</div>
-		</div>
-		<div class="container">
-			<div class="row">
-			
-				<div class="col-sm-5 wow fadeInDown text-center blackout">
-				  <img class="rotate" src="img/icon/tweet.svg" alt="Generic placeholder image">
-				  <h1 class="slate"><span class="brooke">1st</span> Place</h1>
-				  <h1 class="slate"><span class="counter brooke">20.11</span>min</h1>
-				  <h1 class="slate"><span class="counter brooke">4.12</span> m/k</h1>
-				  <h1 class="slate"><span class="counter brooke">6.12</span> m/m</h1>
-				</div><!-- /.col-lg-4 -->
-				
-				<div class="col-sm-2"></div>
-				
-				<div class="col-sm-5 wow fadeInDown text-center blackout">
-				  <img  class="rotate" src="img/icon/picture.svg" alt="Generic placeholder image">
-				  <h1 class="slate"><span class="ash">1st</span> Place</h1>
-				  <h1 class="slate"><span class="counter ash">25.11</span>min</h1>
-				  <h1 class="slate"><span class="counter ash">4.12</span> m/k</h1>
-				  <h1 class="slate"><span class="counter ash">6.12</span> m/m</h1>
-				</div><!-- /.col-lg-4 -->				
-			</div><!-- /.row -->
-		</div>
-	</div>
+	<div id="race-holder"></div>
 	
     <footer>
       <div class="container">
@@ -206,11 +145,45 @@
       </div>
     </footer>
 
+    <!-- race tpl -->
+    <script id="raceTpl" type="text/template">
+    	{{#races}}
+    	<div class="race" style="background-image: url(img/race/{{image}});">
+			<div class="row banner-title {{color}}">
+				<div class="container">
+					{{name}} // {{date}}
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-5 wow fadeInDown text-center blackout">
+					  <img class="rotate" src="img/icon/tweet.svg" alt="Generic placeholder image">
+					  <h1 class="slate"><span class="brooke">{{results.brooke.place}}</span></h1>
+					  <h1 class="slate"><span class="counter brooke">{{results.brooke.time}}</span>min</h1>
+					  <h1 class="slate"><span class="counter brooke">{{results.brooke.kavg}}</span> m/k</h1>
+					  <h1 class="slate"><span class="counter brooke">{{results.brooke.mavg}}</span> m/m</h1>
+					</div>
+					
+					<div class="col-sm-2"></div>
+					
+					<div class="col-sm-5 wow fadeInDown text-center blackout">
+					  <img  class="rotate" src="img/icon/picture.svg" alt="Generic placeholder image">
+					  <h1 class="slate"><span class="ash">{{results.ashlyn.place}}</span></h1>
+					  <h1 class="slate"><span class="counter ash">{{results.ashlyn.time}}</span>min</h1>
+					  <h1 class="slate"><span class="counter ash">{{results.ashlyn.kavg}}</span> m/k</h1>
+					  <h1 class="slate"><span class="counter ash">{{results.ashlyn.mavg}}</span> m/m</h1>
+					</div>			
+				</div>
+			</div>
+		</div>
+		{{/races}}
+    </script>
     <!-- JavaScript -->
     <script src="js/jquery-1.10.2.js"></script>
     <script src="js/bootstrap.js"></script>
 	<script src="js/owl.carousel.js"></script>
 	<script src="js/script.js"></script>
+	<script src="js/mustache.js"></script>
 	<!-- StikyMenu -->
 	<!--<script src="js/stickUp.min.js"></script>-->
 	<script type="text/javascript">
@@ -236,14 +209,6 @@
 	<!-- jquery.counterup -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.0/jquery.waypoints.min.js"></script>
 	<script src="js/jquery.counterup.min.js"></script>
-	<script>
-        jQuery(document).ready(function($) {
-            $('.counter').counterUp({
-                delay: 10,
-                time: 1000
-            });
-        });
-    </script>
 
     <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
 	<script>
@@ -256,6 +221,70 @@
 	    	messagingSenderId: "857514490050"
 	  	};
 	  	firebase.initializeApp(config);
+
+	  	function calcAvg (time, distance, unit) {
+	  		var timeSplit = time.split('.'),
+	  			minutes = parseInt(timeSplit[0]),
+	  			seconds = parseInt(timeSplit[1]),
+	  			allSeconds = (minutes*60) + seconds,
+	  			distance = unit === 'k' ? distance : distance * 0.621371,
+	  			avg = allSeconds / distance,
+	  			finalAvg, totalMins, totalSeconds;
+
+	  		totalMins = Math.floor(avg % 3600 / 60);
+	  		totalSeconds = Math.floor(avg % 3600 % 60);
+
+	  		return totalMins + '.' + totalSeconds;
+	  	}
+
+	  	function createOrderedData (data) {
+	  		var keys = [],
+	  			counter = -1,
+	  			key, item;
+
+	  		var getColor = function (index) {
+	  			return index % 2 ? 'green' : index % 1 ? 'blue' : 'pink';
+	  		}
+
+	  		for (key in data) {
+	  			item = data[key];
+	  			item.slug = key;
+	  			item.color = getColor(counter++),
+	  			item.results.brooke.kavg = calcAvg(item.results.brooke.time, item.distance, 'k');
+	  			item.results.brooke.mavg = calcAvg(item.results.brooke.time, item.distance, 'm');
+	  			item.results.ashlyn.kavg = calcAvg(item.results.ashlyn.time, item.distance, 'k');
+	  			item.results.ashlyn.mavg = calcAvg(item.results.ashlyn.time, item.distance, 'm');
+	  			keys.push(item);
+	  		}
+
+	  		return keys.sort(function (o1, o2) {
+	  			return new Date(o1.date) - new Date(o2.date);
+	  		});
+	  	}
+
+	  	function buildRace (data, index) {
+	  		
+	  	}
+
+	  	// get data
+	  	var races = firebase.database().ref('races').orderByChild('date');
+	  	races.on('value', function (snapshot) {
+	  		var result = createOrderedData(snapshot.val());
+
+	  		var template = $('#raceTpl').html();
+    		var html = Mustache.to_html(template, {
+    			races: result
+    		});
+
+    		$('#race-holder').html(html);
+
+    		jQuery(document).ready(function($) {
+	            $('.counter').counterUp({
+	                delay: 10,
+	                time: 1000
+	            });
+	        });
+	  	});
 	</script>
 </body>
 
