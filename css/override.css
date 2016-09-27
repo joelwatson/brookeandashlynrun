@@ -7,6 +7,7 @@
     background-image: url(../img/race/race.jpg);
     position: relative;
     padding-bottom: 40px;
+    background-size: cover;
 }
 
 .race:before {
