@@ -234,18 +234,20 @@
                 allSeconds = (minutes*60) + seconds,
                 distance = unit === 'k' ? distance : distance * 0.621371,
                 avg = allSeconds / distance,
-                finalAvg, totalMins, totalSeconds;
+                finalAvg, totalMins, totalSeconds, finalTime;
 
-            totalMins = Math.floor(avg % 3600 / 60);
-            totalSeconds = Math.floor(avg % 3600 % 60);
+            totalMins = Math.floor(avg / 60);
+            totalSeconds = Math.floor(avg - totalMins * 60);
 
-            return totalMins + '.' + totalSeconds;
+            finalTime = totalMins + '.' + (totalSeconds.toString().length == 2 ? totalSeconds : ('0' + totalSeconds).toString());
+
+            return parseFloat(finalTime).toFixed(2);
         }
 
         function getTotalTime (data, person) {
             var totalseconds = 0,
                 i, split, distance, seconds, minutes, item,
-                finalMins, finalSeconds;
+                finalMins, finalSeconds, finalTime;
 
             for (i=0; i<data.length; i++) {
                 item = data[i];
@@ -255,9 +257,11 @@
                 totalseconds += ((minutes*60) + seconds);
             }
             finalMins = Math.floor(totalseconds / 60);
-            finalSeconds = totalseconds - finalMins * 60;
+            finalSeconds = Math.floor(totalseconds - finalMins * 60);
 
-            return finalMins + '.' + finalSeconds;
+            finalTime = finalMins + '.' + (finalSeconds.toString().length == 2 ? finalSeconds : ('0' + finalSeconds).toString());
+
+            return parseFloat(finalTime).toFixed(2);
         }
 
         function calcTotals (data) {
